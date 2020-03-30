@@ -97,6 +97,7 @@ export interface IRemoteAPI {
     getOAuthToken(oAuthProvider: string): Promise<string>;
     getOAuthProviders(): Promise<string[]>;
     updateActivity(workspaceId: string): Promise<void>;
+    updateHeaders(headers: { [headerTitle: string]: string }): Promise<void>;
 }
 
 export class RemoteAPI implements IRemoteAPI {
@@ -106,6 +107,10 @@ export class RemoteAPI implements IRemoteAPI {
 
     constructor(remoteApi: IResources) {
         this.remoteAPI = remoteApi;
+    }
+
+    updateHeaders(headers: { [headerTitle: string]: string }): Promise<void> {
+        return this.remoteAPI.updateHeaders(headers);
     }
 
     /**

@@ -57,6 +57,7 @@ export interface IResources {
     deleteUserPreferences(list: string[] | undefined): AxiosPromise<void>;
     getOAuthToken(oAuthProvider: string): AxiosPromise<{ token: string }>;
     updateActivity(workspaceId: string): AxiosPromise<void>;
+    updateHeaders(headers: { [headerTitle: string]: string }): Promise<void>;
 }
 
 export class Resources implements IResources {
@@ -67,6 +68,10 @@ export class Resources implements IResources {
     constructor(private readonly axios: AxiosInstance,
         private readonly baseUrl: string,
         private readonly headers: { [headerTitle: string]: string } = {}) {
+        this.updateHeaders(headers);
+    }
+
+    async updateHeaders(headers: { [headerTitle: string]: string }): Promise<void> {
         for (const title in headers) {
             if (headers.hasOwnProperty(title)) {
                 this.axios.defaults.headers.common[title] = headers[title];
