@@ -94,7 +94,7 @@ export interface IRemoteAPI {
     replaceUserPreferences(preferences: Preferences): Promise<Preferences>;
     deleteUserPreferences(): Promise<void>;
     deleteUserPreferences(list: string[] | undefined): Promise<void>;
-    getOAuthToken(oAuthProvider: string): Promise<string>;
+    getOAuthToken(oAuthProvider: string, token?: string): Promise<string>;
     getOAuthProviders(): Promise<string[]>;
     updateActivity(workspaceId: string): Promise<void>;
     updateHeaders(headers: { [headerTitle: string]: string }): Promise<void>;
@@ -466,7 +466,7 @@ export class RemoteAPI implements IRemoteAPI {
         });
     }
 
-    getOAuthToken(oAuthProvider: string): Promise<string> {
+    getOAuthToken(oAuthProvider: string, token?: string): Promise<string> {
         return new Promise((resolve, reject) => {
             this.remoteAPI.getOAuthToken(oAuthProvider)
                 .then((response: AxiosResponse<{ token: string }>) => {

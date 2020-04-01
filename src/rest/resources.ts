@@ -55,9 +55,8 @@ export interface IResources {
     updateUserPreferences(update: Preferences): AxiosPromise<Preferences>;
     replaceUserPreferences(preferences: Preferences): AxiosPromise<Preferences>;
     deleteUserPreferences(list: string[] | undefined): AxiosPromise<void>;
-    getOAuthToken(oAuthProvider: string): AxiosPromise<{ token: string }>;
+    getOAuthToken(oAuthProvider: string, token?: string): AxiosPromise<{ token: string }>;
     updateActivity(workspaceId: string): AxiosPromise<void>;
-    updateHeaders(headers: { [headerTitle: string]: string }): Promise<void>;
 }
 
 export class Resources implements IResources {
@@ -68,10 +67,6 @@ export class Resources implements IResources {
     constructor(private readonly axios: AxiosInstance,
         private readonly baseUrl: string,
         private readonly headers: { [headerTitle: string]: string } = {}) {
-        this.updateHeaders(headers);
-    }
-
-    async updateHeaders(headers: { [headerTitle: string]: string }): Promise<void> {
         for (const title in headers) {
             if (headers.hasOwnProperty(title)) {
                 this.axios.defaults.headers.common[title] = headers[title];
@@ -270,7 +265,18 @@ export class Resources implements IResources {
         });
     }
 
-    public getOAuthToken(oAuthProvider: string): AxiosPromise<{ token: string }> {
+    public getOAuthToken(oAuthProvider: string, token?: string): AxiosPromise<{ token: string }> {
+        const header = this.axios.defaults.headers.Authorization;
+        console.log('>>>>>>>>>>>>>>>>>>>>>>> header ' + this.axios.defaults.headers);
+        console.log('>>>>>>>>>>>>>>>>>>>>>>> header ' + header);
+        if (token) {
+            this.axios.defaults.headers.Authorization = 'Bearer ' + token;
+            console.log('>>>>>>>>>>>>>>>>>>>>>>> header ' + this.axios.defaults.headers.Authorization);
+        }
+        if (header) {
+            this.axios.defaults.headers.Authorization = 'Bearer ' + token;
+            console.log('>>>>>>>>>>>>>>>>>>>>>>> header ' + this.axios.defaults.headers.Authorization);
+        }
         return this.axios.request<{ token: string }>({
             method: 'GET',
             baseURL: this.baseUrl,
