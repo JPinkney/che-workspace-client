@@ -266,19 +266,19 @@ export class Resources implements IResources {
     }
 
     public getOAuthToken(oAuthProvider: string, token?: string): AxiosPromise<{ token: string }> {
-        const header = this.axios.defaults.headers.Authorization;
-        console.log('>>>>>>>>>>>>>>>>>>>>>>> header ' + this.axios.defaults.headers);
-        console.log('>>>>>>>>>>>>>>>>>>>>>>> header ' + header);
+        const headers: { [key: string]: string } = this.headers;
         if (token) {
-            this.axios.defaults.headers.Authorization = 'Bearer ' + token;
-            console.log('>>>>>>>>>>>>>>>>>>>>>>> header ' + this.axios.defaults.headers.Authorization);
-        }
-        if (header) {
-            this.axios.defaults.headers.Authorization = 'Bearer ' + token;
-            console.log('>>>>>>>>>>>>>>>>>>>>>>> header ' + this.axios.defaults.headers.Authorization);
+            for (const key in this.headers) {
+                if (headers.hasOwnProperty(key)) {
+                    console.log('>>>>>>>>>>>>>>>>>>> key ' + key);
+                }
+            }
+            const header  = 'Authorization';
+            headers[header] = 'Bearer ' + token;
         }
         return this.axios.request<{ token: string }>({
             method: 'GET',
+            headers,
             baseURL: this.baseUrl,
             url: `/oauth/token?oauth_provider=${oAuthProvider}`
         });

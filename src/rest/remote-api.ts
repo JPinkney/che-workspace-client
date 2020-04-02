@@ -463,7 +463,7 @@ export class RemoteAPI implements IRemoteAPI {
 
     getOAuthToken(oAuthProvider: string, token?: string): Promise<string> {
         return new Promise((resolve, reject) => {
-            this.remoteAPI.getOAuthToken(oAuthProvider)
+            this.remoteAPI.getOAuthToken(oAuthProvider, token)
                 .then((response: AxiosResponse<{ token: string }>) => {
                     resolve(response.data.token);
                 })
